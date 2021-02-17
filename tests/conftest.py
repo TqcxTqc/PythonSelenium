@@ -19,13 +19,25 @@ def pytest_addoption(parser):
                      action="store",
                      default=DRIVER_PATH
                      )
+    parser.addoption("--headless",
+                     action="store_true",
+                     help="Run browser as Headless"
+                     )
 
 
-def get_driver(drivers, browser):
-    """Selecting driver from executable path and browser name"""
+def get_browser_driver(drivers, browser, headless):
+    """Selecting driver from executable path,parameter and browser name"""
     if browser == "chrome":
+        if headless:
+            option = webdriver.ChromeOptions()
+            option.headless = True
+            return webdriver.Chrome(executable_path=path.join(drivers, "chromedriver.exe"), options=option)
         return webdriver.Chrome(executable_path=path.join(drivers, "chromedriver.exe"))
     elif browser == "firefox":
+        if headless:
+            option = webdriver.FirefoxOptions()
+            option.headless = True
+            return webdriver.Firefox(executable_path=path.join(drivers, "geckodriver.exe"), options=option)
         return webdriver.Firefox(executable_path=path.join(drivers, "geckodriver.exe"))
     elif browser == "opera":
         return webdriver.Opera(executable_path=path.join(drivers, "operadriver.exe"))
@@ -38,14 +50,15 @@ def browser(request):
     # Collecting startup parameters for pytest
     browser = request.config.getoption("--browser")
     url = request.config.getoption("--url")
+    headless = request.config.getoption("--headless")
     drivers = request.config.getoption("--drivers")
 
-    driver = get_driver(drivers, browser)
+    driver = get_browser_driver(drivers, browser, headless)
 
     driver.url = url
     driver.get(url)
 
-    driver.maximize_window()
+    # driver.maximize_window()
 
     request.addfinalizer(driver.close)
 
