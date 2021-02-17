@@ -4,7 +4,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import random
 
-CATALOGUE_URL = "/index.php?route=product/category&path=20"
+CATALOGUE_URL = "index.php?route=product/category&path=20"
 
 
 @pytest.mark.parametrize('expected_item_titles',

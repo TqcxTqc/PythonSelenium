@@ -2,7 +2,7 @@ import pytest
 from selenium import webdriver
 from os import path
 
-DRIVER_PATH = path.abspath("../drivers/")
+DRIVER_PATH = path.abspath("drivers")
 
 
 def pytest_addoption(parser):
