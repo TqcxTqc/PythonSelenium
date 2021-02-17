@@ -31,11 +31,12 @@ def test_check_featured_items(browser, expected_items):
                                  ['Contact Us', 'Returns', 'Site Map'],
                                  ['Brands', 'Gift Certificates', 'Affiliate,Specials'],
                                  ['My Account', 'Order History', 'Wish List', 'Newsletter']
-                         )],
-                         ids=['Information', 'Customer_service', 'Extras', 'My_account'])
+                         )])
 @pytest.mark.parametrize('expected_footer_titles', [['Information', 'Customer Service', 'Extras', 'My Account']])
 def test_check_main_page_footer(browser, expected_information, expected_customer_service, expected_extras,
                                 expected_my_account, expected_footer_titles):
+    """Checking main page footer for correctness of sub-links"""
+
     browser.get(browser.url)
     get_footer_titles = browser.find_elements_by_css_selector('footer .col-sm-3 h5')
     actual_footer_title = []
@@ -44,3 +45,22 @@ def test_check_main_page_footer(browser, expected_information, expected_customer
         actual_footer_title.append(text_in_items.text)
 
     assert actual_footer_title == expected_footer_titles
+
+
+@pytest.mark.parametrize('expected_menu_items',
+                         [
+                             ['Desktops', 'Laptops & Notebooks', 'Components', 'Tablets',
+                              'Software', 'Phones & PDAs', 'Cameras', 'MP3 Players']
+                         ])
+def test_check_store_menu(browser, expected_menu_items):
+    """Checking main menu list of items"""
+    browser.get(browser.url)
+
+    expected_items = range(1, 9)
+    list_of_menu_items = []
+
+    for item in expected_items:
+        menu_bar_items = browser.find_element_by_xpath(f"//ul[@class='nav navbar-nav']/li[{item}]")
+        list_of_menu_items.append(menu_bar_items.text)
+
+    assert list_of_menu_items == expected_menu_items

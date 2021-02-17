@@ -31,16 +31,16 @@ def get_browser_driver(drivers, browser, headless):
         if headless:
             option = webdriver.ChromeOptions()
             option.headless = True
-            return webdriver.Chrome(executable_path=path.join(drivers, "chromedriver.exe"), options=option)
-        return webdriver.Chrome(executable_path=path.join(drivers, "chromedriver.exe"))
+            return webdriver.Chrome(executable_path=path.join(drivers, "chromedriver"), options=option)
+        return webdriver.Chrome(executable_path=path.join(drivers, "chromedriver"))
     elif browser == "firefox":
         if headless:
             option = webdriver.FirefoxOptions()
             option.headless = True
-            return webdriver.Firefox(executable_path=path.join(drivers, "geckodriver.exe"), options=option)
-        return webdriver.Firefox(executable_path=path.join(drivers, "geckodriver.exe"))
+            return webdriver.Firefox(executable_path=path.join(drivers, "geckodriver"), options=option)
+        return webdriver.Firefox(executable_path=path.join(drivers, "geckodriver"))
     elif browser == "opera":
-        return webdriver.Opera(executable_path=path.join(drivers, "operadriver.exe"))
+        return webdriver.Opera(executable_path=path.join(drivers, "operadriver"))
     else:
         return f"{browser} not found"
 
@@ -58,8 +58,8 @@ def browser(request):
     driver.url = url
     driver.get(url)
 
-    # driver.maximize_window()
+    driver.maximize_window()
 
-    request.addfinalizer(driver.close)
+    request.addfinalizer(driver.quit)
 
     return driver
