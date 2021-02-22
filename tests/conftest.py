@@ -63,3 +63,12 @@ def browser(request):
     request.addfinalizer(driver.quit)
 
     return driver
+
+
+@pytest.fixture()
+def admin_account(request):
+    request = {'username': 'demo',
+               'password': 'demo'
+               }
+
+    return request
