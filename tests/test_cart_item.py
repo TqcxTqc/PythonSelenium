@@ -3,7 +3,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
-CART_ITEM_URL = "index.php?route=product/product&path=57&product_id=49"
+CART_ITEM_URL = "/index.php?route=product/product&path=57&product_id=49"
 
 
 @pytest.mark.parametrize('device_title,product_code,reward_points,availability',

@@ -13,7 +13,7 @@ def pytest_addoption(parser):
                      )
     parser.addoption("--url",
                      action="store",
-                     default="https://demo.opencart.com/"
+                     default="https://demo.opencart.com"
                      )
     parser.addoption("--drivers",
                      action="store",
@@ -67,8 +67,5 @@ def browser(request):
 
 @pytest.fixture()
 def admin_account(request):
-    request = {'username': 'demo',
-               'password': 'demo'
-               }
-
+    request = {'username': 'demo', 'password': 'demo'}
     return request

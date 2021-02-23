@@ -4,16 +4,13 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import random
 
-CATALOGUE_URL = "index.php?route=product/category&path=20"
+CATALOGUE_URL = "/index.php?route=product/category&path=20"
 
 
 @pytest.mark.parametrize('expected_item_titles',
-                         [
-                             ['Apple Cinema 30"', 'Canon EOS 5D', 'HP LP3065', 'HTC Touch HD',
-                              'iPhone', 'iPod Classic', 'MacBook', 'MacBook Air', 'Palm Treo Pro',
-                              'Product 8', 'Samsung SyncMaster 941BW', 'Sony VAIO']
-                         ]
-                         )
+                         [['Apple Cinema 30"', 'Canon EOS 5D', 'HP LP3065', 'HTC Touch HD',
+                           'iPhone', 'iPod Classic', 'MacBook', 'MacBook Air', 'Palm Treo Pro',
+                           'Product 8', 'Samsung SyncMaster 941BW', 'Sony VAIO']])
 def test_desktops_catalogue(browser, expected_item_titles):
     """Checking desktops products from catalogue page"""
     browser.get(f"{browser.url}{CATALOGUE_URL}")
