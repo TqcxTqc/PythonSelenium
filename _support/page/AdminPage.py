@@ -1,7 +1,10 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from .BasePage import BasePage
 
 
-class AdminPage:
+class AdminPage(BasePage):
     ADMIN_URL = "/admin"
     LABEL_USERNAME = (By.CSS_SELECTOR, "label[for='input-username']")
     LABEL_PASSWORD = (By.CSS_SELECTOR, "label[for='input-password']")
@@ -13,39 +16,30 @@ class AdminPage:
     __NAVIGATION_SALES = (By.XPATH, "//a[contains(text(),'Sales')]")
     __SALES_SUBMENU_ORDERS = (By.XPATH, "//a[contains(text(),'Orders')]")
 
-    def __init__(self, driver):
-        self.driver = driver
-
-    def open_page(self):
-        self.driver.get(f"{self.driver.url}{AdminPage.ADMIN_URL}")
-
-    def check_page_label_is_present(self, *args):
+    def check_page_element_is_present(self, *args):
         """Find an element given a By strategy and locator"""
-        browser = self.driver
-        label = browser.find_element(*args)
+        label = self.browser.find_element(*args)
         label.is_displayed()
 
     def sign_in_admin_panel(self, username, password):
-        browser = self.driver
-        username_field = browser.find_element(*AdminPage.USERNAME_FIELD)
-        password_field = browser.find_element(*AdminPage.PASSWORD_FIELD)
+        wait = WebDriverWait(self.browser, 5)
+        username_field = self.browser.find_element(*AdminPage.USERNAME_FIELD)
+        password_field = self.browser.find_element(*AdminPage.PASSWORD_FIELD)
         username_field.clear()
         username_field.send_keys(username)
         password_field.clear()
         password_field.send_keys(password)
-        browser.find_element(*AdminPage.LOGIN_BUTTON).click()
+        self.browser.find_element(*AdminPage.LOGIN_BUTTON).click()
+        wait.until(EC.title_is("Dashboard"))
 
     def navigate_to_ordes_in_sales(self):
-        browser = self.driver
-        browser.find_element(*AdminPage.__NAVIGATION_SALES).click()
-        browser.find_element(*AdminPage.__SALES_SUBMENU_ORDERS).click()
+        self.browser.find_element(*AdminPage.__NAVIGATION_SALES).click()
+        self.browser.find_element(*AdminPage.__SALES_SUBMENU_ORDERS).click()
 
     def get_title_page(self):
-        browser = self.driver
-        title_text = browser.find_element(*AdminPage.ADMIN_TITLE)
+        title_text = self.browser.find_element(*AdminPage.ADMIN_TITLE)
         return title_text.text
 
     def get_order_items_count(self):
-        browser = self.driver
-        order_count = browser.find_element(*AdminPage.ORDERS_ITEM_COUNT)
+        order_count = self.browser.find_element(*AdminPage.ORDERS_ITEM_COUNT)
         return order_count.text[:-12]
