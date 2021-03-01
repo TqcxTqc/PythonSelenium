@@ -56,7 +56,6 @@ def browser(request):
     driver = get_browser_driver(drivers, browser, headless)
 
     driver.url = url
-    driver.get(url)
 
     driver.maximize_window()
 
