@@ -1,10 +1,12 @@
 from .common.TopMenu import TopMenu
+from .common.Alert import Alert
 
 
 class BasePage:
     def __init__(self, browser):
         self.browser = browser
         self.top_menu = TopMenu(self.browser)
+        self.alert = Alert(self.browser)
 
     def open_special_page(self, url):
         self.browser.get(f"{self.browser.url}{url}")
