@@ -54,11 +54,8 @@ def browser(request):
     drivers = request.config.getoption("--drivers")
 
     driver = get_browser_driver(drivers, browser, headless)
-
     driver.url = url
-
     driver.maximize_window()
-
     request.addfinalizer(driver.quit)
 
     return driver
