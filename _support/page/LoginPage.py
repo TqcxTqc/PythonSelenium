@@ -29,4 +29,4 @@ class LoginPage(BasePage):
         self.browser.find_element(*LoginPage.LOGIN_BUTTON).click()
 
     def wait_error_alert(self):
-        return self.alert.get_danger_alert()
+        return self.alert.get_alert()
