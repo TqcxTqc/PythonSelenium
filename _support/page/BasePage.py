@@ -1,5 +1,6 @@
 from .common.TopMenu import TopMenu
 from .common.Alert import Alert
+from .common.Footer import Footer
 
 
 class BasePage:
@@ -7,6 +8,7 @@ class BasePage:
         self.browser = browser
         self.top_menu = TopMenu(self.browser)
         self.alert = Alert(self.browser)
+        self.footer = Footer(self.browser)
 
     def open_special_page(self, url):
         self.browser.get(f"{self.browser.url}{url}")
