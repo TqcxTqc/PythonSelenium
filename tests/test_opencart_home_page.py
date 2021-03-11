@@ -6,7 +6,9 @@ def test_checking_logo(browser):
     """Checking presentation of logo with correct URL and text of logo"""
     home_page = HomePage(browser)
     home_page.open_page()
-    home_page.check_home_page_logo()
+    logo = home_page.get_home_page_logo()
+    assert logo.text == "Your Store"
+    assert logo.get_property("baseURI") == "https://demo.opencart.com/"
 
 
 @pytest.mark.parametrize('expected_items', [['MacBook', 'iPhone', 'Apple Cinema 30"', 'Canon EOS 5D']])

@@ -6,6 +6,8 @@ def test_presents_of_login_page(browser):
     login_page = LoginPage(browser)
     login_page.open_page()
     login_page.open_login()
+    page_title = browser.title
+    assert page_title == "Account Login"
     login_page.check_page()
 
 
