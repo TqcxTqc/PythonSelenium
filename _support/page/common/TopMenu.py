@@ -13,13 +13,9 @@ class TopMenu:
     def move_my_account_to_login(self):
         self.browser.find_element(*TopMenu.MY_ACCOUNT).click()
         self.browser.find_element(*TopMenu.SUBMENU_LOGIN).click()
-        page_title = self.browser.title
-        assert page_title == "Account Login"
 
-    def top_menu_logo(self):
-        logo = self.browser.find_element(*TopMenu.LOGO)
-        assert logo.text == "Your Store"
-        assert logo.get_property("baseURI") == "https://demo.opencart.com/"
+    def get_top_menu_logo(self):
+        return self.browser.find_element(*TopMenu.LOGO)
 
     def top_navigation_bar(self):
         return self.browser.find_element(*TopMenu.NAVIGATION_BAR)

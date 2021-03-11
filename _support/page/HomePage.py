@@ -16,8 +16,8 @@ class HomePage(BasePage):
         assert get_all_items == items
         assert self.browser.find_element(*HomePage.FEATURED_TITLE).text == "Featured"
 
-    def check_home_page_logo(self):
-        self.top_menu.top_menu_logo()
+    def get_home_page_logo(self):
+        return self.top_menu.get_top_menu_logo()
 
     def check_footer(self, footer_columns):
         footer = self.footer.get_footer()
