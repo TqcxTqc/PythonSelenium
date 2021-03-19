@@ -22,6 +22,7 @@ class AdminPage(BasePage):
         label.is_displayed()
 
     def sign_in_admin_panel(self, username, password):
+        self.logger.info(f"Signing in admin panel as: {username} {password}")
         wait = WebDriverWait(self.browser, 5)
         username_field = self.browser.find_element(*AdminPage.USERNAME_FIELD)
         password_field = self.browser.find_element(*AdminPage.PASSWORD_FIELD)
