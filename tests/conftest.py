@@ -1,48 +1,30 @@
 import pytest
+import logging
 from selenium import webdriver
+from selenium.webdriver.support.events import EventFiringWebDriver, AbstractEventListener
 from os import path
+from datetime import datetime
 
-DRIVER_PATH = path.abspath("drivers")
+LOG_FOLDER = path.abspath("logs")
+
+logging.basicConfig(level=logging.INFO, filename=f"{LOG_FOLDER}/{datetime.now()}.log",
+                    format="%(asctime)s: %(levelname)s: %(name)s: %(message)s",
+                    datefmt="%m/%d/%Y %I:%M:%S %p")
+
+
+class MyListener(AbstractEventListener):
+    def on_exception(self, exception, driver):
+        logging.error(f"Oops..: {exception}")
+        driver.save_screenshot(f"{LOG_FOLDER}/{driver.session_id}.png")
 
 
 def pytest_addoption(parser):
-    parser.addoption("--browser",
-                     action="store",
-                     default="chrome",
-                     choices=['chrome', 'firefox', 'opera']
-                     )
-    parser.addoption("--url",
-                     action="store",
-                     default="https://demo.opencart.com"
-                     )
-    parser.addoption("--drivers",
-                     action="store",
-                     default=DRIVER_PATH
-                     )
-    parser.addoption("--headless",
-                     action="store_true",
-                     help="Run browser as Headless"
-                     )
-
-
-def get_browser_driver(drivers, browser, headless):
-    """Selecting driver from executable path,parameter and browser name"""
-    if browser == "chrome":
-        if headless:
-            option = webdriver.ChromeOptions()
-            option.headless = True
-            return webdriver.Chrome(executable_path=path.join(drivers, "chromedriver"), options=option)
-        return webdriver.Chrome(executable_path=path.join(drivers, "chromedriver"))
-    elif browser == "firefox":
-        if headless:
-            option = webdriver.FirefoxOptions()
-            option.headless = True
-            return webdriver.Firefox(executable_path=path.join(drivers, "geckodriver"), options=option)
-        return webdriver.Firefox(executable_path=path.join(drivers, "geckodriver"))
-    elif browser == "opera":
-        return webdriver.Opera(executable_path=path.join(drivers, "operadriver"))
-    else:
-        return f"{browser} not found"
+    parser.addoption("--browser", action="store", default="chrome", choices=['chrome', 'firefox', 'opera'])
+    parser.addoption("--url", action="store", default="https://demo.opencart.com")
+    parser.addoption("--executor", action="store", default="192.168.0.13")
+    parser.addoption("--bversion", action="store", default="88.0")
+    parser.addoption("--vnc", action="store_true", default=False)
+    parser.addoption("--name", action="store")
 
 
 @pytest.fixture()
@@ -50,13 +32,38 @@ def browser(request):
     # Collecting startup parameters for pytest
     browser = request.config.getoption("--browser")
     url = request.config.getoption("--url")
-    headless = request.config.getoption("--headless")
-    drivers = request.config.getoption("--drivers")
+    executor = request.config.getoption("--executor")
+    version = request.config.getoption("--bversion")
+    vnc = request.config.getoption("--vnc")
+    name = request.config.getoption("--name")
+    test_name = request.node.name
 
-    driver = get_browser_driver(drivers, browser, headless)
+    logging.info(f"==> Test {test_name} executing <==")
+
+    executor_url = f"http://{executor}:4444/wd/hub"
+
+    capabilities = {
+        "browserName": browser,
+        "browserVersion": version,
+        "selenoid:options": {
+            "enableVNC": vnc,
+            "name": name
+        }
+    }
+
+    logging.info(f"==> Initialize browser:{browser} <==")
+
+    driver = EventFiringWebDriver(webdriver.Remote(
+        command_executor=executor_url, desired_capabilities=capabilities), MyListener())
+
     driver.url = url
-    driver.maximize_window()
-    request.addfinalizer(driver.quit)
+
+    def end():
+        driver.quit()
+        logging.info(f"==> Closing {browser} <==")
+        logging.info(f"==> Test {test_name} finished <==")
+
+    request.addfinalizer(end)
 
     return driver
 
