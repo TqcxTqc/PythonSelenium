@@ -38,7 +38,7 @@ def browser(request):
     name = request.config.getoption("--name")
     test_name = request.node.name
 
-    logging.info(f"==> Test {test_name} executing <==")
+    logging.info(f"==> EXECUTING TEST: {test_name} <==")
 
     executor_url = f"http://{executor}:4444/wd/hub"
 
@@ -51,7 +51,7 @@ def browser(request):
         }
     }
 
-    logging.info(f"==> Initialize browser:{browser} <==")
+    logging.info(f"==> INITIALIZE BROWSER:{browser} <==")
 
     driver = EventFiringWebDriver(webdriver.Remote(
         command_executor=executor_url, desired_capabilities=capabilities), MyListener())
@@ -60,8 +60,8 @@ def browser(request):
 
     def end():
         driver.quit()
-        logging.info(f"==> Closing {browser} <==")
-        logging.info(f"==> Test {test_name} finished <==")
+        logging.info(f"==> CLOSING: {browser} <==")
+        logging.info(f"==> TEST {test_name} FINISHED <==")
 
     request.addfinalizer(end)
 

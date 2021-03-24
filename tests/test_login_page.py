@@ -1,6 +1,8 @@
+import allure
 from _support.page import LoginPage
 
 
+@allure.title("Test checking presents of login page")
 def test_presents_of_login_page(browser):
     """Checking correctness of login table"""
     login_page = LoginPage(browser)
@@ -11,6 +13,9 @@ def test_presents_of_login_page(browser):
     login_page.check_page()
 
 
+@allure.feature("Authorization")
+@allure.story("User invalid authorization")
+@allure.title("Testing Login with incorrect username")
 def test_error_alert_login(browser):
     """Checking alert message with empty values"""
     login_page = LoginPage(browser)
