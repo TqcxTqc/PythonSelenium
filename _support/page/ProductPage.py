@@ -46,7 +46,9 @@ class ProductPage(BasePage):
         return result
 
     def add_item_to_cart(self):
+        self.logger.info(f"Adding item to the cart")
         button = self.browser.find_element(*ProductPage.ADD_TO_CART)
+        self.logger.info(f"Clicking {button.text}")
         button.click()
         assert button.text == "Loading..."
 
@@ -57,6 +59,7 @@ class ProductPage(BasePage):
     def get_product_price(self, product_price, product_tax):
         actual_price = self.browser.find_element(*ProductPage.PRODUCT_PRICE)
         actual_tax = self.browser.find_element(*ProductPage.PRODUCT_TAX)
+        self.logger.info(f"Get the product price: {actual_price.text} and tax {actual_tax.text}")
         assert actual_tax.text.split(":")[1].replace(" ", "") == product_tax
         assert actual_price.text == product_price
 

@@ -1,6 +1,8 @@
+import allure
 from _support.page.AdminPage import AdminPage
 
 
+@allure.title("Checking visibility of admin page")
 def test_admin_page_visibility(browser):
     """Checking of availability of admin page"""
     admin_page = AdminPage(browser)
@@ -8,7 +10,9 @@ def test_admin_page_visibility(browser):
     admin_page.check_page_element_is_present(*admin_page.LABEL_USERNAME)
     admin_page.check_page_element_is_present(*admin_page.LABEL_USERNAME)
 
-
+@allure.feature("Authorization")
+@allure.story("Admin authorization")
+@allure.title("Checking login in to admin page")
 def test_login_inside_admin_panel(browser, admin_account):
     """Checking logging functionality to the admin panel"""
     admin_page = AdminPage(browser)
@@ -18,6 +22,7 @@ def test_login_inside_admin_panel(browser, admin_account):
     assert browser.title == "Dashboard"
 
 
+@allure.title("Checking orders in admin page")
 def test_check_orders(browser, admin_account):
     """Checking Sales order items"""
     admin_page = AdminPage(browser)
