@@ -21,7 +21,7 @@ class MyListener(AbstractEventListener):
 def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="chrome", choices=['chrome', 'firefox', 'opera'])
     parser.addoption("--url", action="store", default="https://demo.opencart.com")
-    parser.addoption("--executor", action="store", default="192.168.0.13")
+    parser.addoption("--executor", action="store", default="192.168.0.22")
     parser.addoption("--bversion", action="store", default="88.0")
     parser.addoption("--vnc", action="store_true", default=False)
     parser.addoption("--name", action="store")
